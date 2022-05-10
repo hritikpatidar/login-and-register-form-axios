@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import swal from 'sweetalert';
 
 var initialState= {
     first_name:"",
@@ -16,42 +19,31 @@ export default function Register() {
     //1. state/Hooks
     //const [date, setDate] = useState(new Date());
     const [user, setUser] = useState(initialState);
-
+    const navigate = useNavigate();
 
     //2. function defination
-    let handalSubmit = (e) => {
-        e.preventDefault();
-        //console.log(user);
-        // try {
-        //     fetch("https://myfbspike.herokuapp.com/api/register/",{
-        //         method:"POST",
-        //         header:{
-        //             contentType : "application/json",
-        //         },
-        //         body: JSON.stringify(user),
-                
-        //     }).then((response)=>{
-        //         return response.json()
-
-        //     }).then((data)=>{
-        //         console.log(data);
-        //     }).catch((err)=>{
-        //         console.log(err);
-        //     })
-        // } catch (error) {
-        //     console.log(error)
-        // }
-
+    let handalSubmit = async (e) => {
         try {
-            const response = await axios.Post("https://myfbspike.herokuapp.com/api/register/");
+            await axios.post("https://myfbspike.herokuapp.com/api/register/",user)
+            .then((response)=>{
+
+                //setUser(response.data);
+                console.log("response",response);
+                navigate("/login")
+                swal("Good job!", "User Register Success", "success");
+            }).catch((err)=>{
+                console.log("okokok");
+                swal("", "User Not Register", "error");
+            })
+           
             //.log(response.data);
             //console.log("phle",teacher);
             //now set the data in teacher hook variable
-            setUser(response);
+            
       
-          } catch (error) {
-            //console.error(error);
-          }
+        }catch (error) {
+            console.error(error);
+        }
         
       
      
