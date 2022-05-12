@@ -17,6 +17,7 @@ function App() {
       <Route path="/" element={ <Register /> }/>
       <Route path="/Login" element={ <Login /> }/>
       <Route path="/forgetpassword" element={ <Forgetpwd />}/>
+      
       <Route exact element={<PrivateRoute />}>
         <Route path="" element={ <Layout />}>
           <Route index path="home" element={ <Home /> }/>

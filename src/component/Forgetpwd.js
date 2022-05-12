@@ -23,23 +23,25 @@ export default function Forgetpwd() {
         setForget({ ...forget, ...newData });
         //console.log(login)
     }
-    let handalForget =async()=>{
+    let handalForget =()=>{
         //console.log(login)
         try {
             const emailregex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
 
-            if(!forget.email || !emailregex.test(forget.email) ){
+            if(!forget.email || !emailregex.test(forget.email)  || forget.email){
                 let errors = {};
                
                 if (!forget.email) {
                     errors.email = "Please enter your email"
                 }else if(!emailregex.test(forget.email)) {
                     errors.email = "Email does not valid"
+                }else if(forget.emai){
+                    errors.email= " "
                 }
 
                 setError(errors);
             }else {
-                const res = await axios.post('https://myfbspike.herokuapp.com/auth/password_reset',forget)
+                //const res = await axios.post('https://myfbspike.herokuapp.com/auth/password_reset',forget)
             }
             
             
