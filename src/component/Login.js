@@ -73,7 +73,24 @@ export default function Login() {
         newData = { ...login, [e.target.name]: e.target.value }
         setLogin({ ...login, ...newData });
         //console.log(login)
+
+        const emailregex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+        console.log(newData.email)
+        if(newData.email == ""){
+            error.email = "Enter your email"
+        }else if(newData.email.length < 3){
+            error.email = "Enter minimum 3 caracturs";
+        }else if(!emailregex.test(newData.email)){
+            error.email = "please enter valid email"
+        }else if(emailregex.test(newData.email)){
+            error.email = ""
+        }
+
+        // now hear password code 
+        setError(error);
     }
+
+   
 
     let handalRegister = (e)=>{
         navigate('/');
