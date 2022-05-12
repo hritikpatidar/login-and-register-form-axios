@@ -23,13 +23,14 @@ export default function Register() {
     const [user, setUser] = useState(initialState);
     const [error, setError] = useState(initialState)
     const navigate = useNavigate();
-
     useEffect(() => {
-        const login = localStorage.getItem('auth_token');
-        if (login) {
-            navigate('/home');
+        const token1 = localStorage.getItem('auth_token');
+        if(token1){
+            navigate('/home')
         }
     }, [])
+
+  
 
     //2. function defination
 

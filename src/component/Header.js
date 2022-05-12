@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React from 'react'
-import { Button, Container, Nav, Navbar, NavLink } from 'react-bootstrap'
-import {  useNavigate } from 'react-router-dom'
+import { Button, Container, Nav, Navbar} from 'react-bootstrap'
+import {  Link, useNavigate } from 'react-router-dom'
 import swal from 'sweetalert'
 
 
@@ -38,13 +38,13 @@ export default function Header() {
                 <Navbar.Brand href="#home">Patidar-Project</Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
-                    <Nav className="me-auto">
-                        <NavLink href="/home">Home</NavLink>
-                        <NavLink href="/news">News</NavLink>
-                        <NavLink href="/sport">Sports</NavLink>
-                        <NavLink href="/features">features</NavLink>
-                        <NavLink href="/about">About</NavLink>
-                        <NavLink href="/contact">Contect</NavLink>
+                    <Nav className="me-auto" >
+                        <Link to="/home" className="me-3 ms-5 text-white text-decoration-none">Home</Link>
+                        <Link to="/news" className="me-3 text-white text-decoration-none">News</Link>
+                        <Link to="/sport" className="me-3 text-white text-decoration-none">Sports</Link>
+                        <Link to="/features" className="me-3 text-white text-decoration-none" >features</Link>
+                        <Link to="/about" className="me-3 text-white text-decoration-none">About</Link>
+                        <Link to="/contact" className="me-3 text-white text-decoration-none">Contect</Link>
                     </Nav>
                    <Button onClick={(e)=>{ hendalLogout(e) }}>logout</Button>
                 </Navbar.Collapse>

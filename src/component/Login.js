@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, {  useEffect, useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';
 
 
@@ -16,13 +16,12 @@ export default function Login() {
     const [login, setLogin] = useState(initialState);
     const [error, setError] = useState(initialState)
     const navigate = useNavigate();
-
     useEffect(() => {
-        const login =localStorage.getItem('auth_token');
-        if(login){
-            navigate('/home');
+        const token1 = localStorage.getItem('auth_token');
+        if(token1){
+            navigate('/home')
         }
-     }, [])
+    }, [])
 
     //2. function defination
     let handalLogin= async ()=>{
@@ -99,6 +98,11 @@ export default function Login() {
                             <Form.Control type="password" name="password" value={login.password} onChange={(e) => { handalChange(e)}} placeholder="Enter your password" />
                             <span style={{color:"red"}}>{error?.password}</span>
                         </Form.Group>
+                        <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
+                            <Form.Label>
+                                <Link to="/forgetpassword">Forget Password</Link>
+                            </Form.Label>
+                        </Form.Group>
 
                         <div className="d-grid gap-2 mb-3">
                             <Button variant="primary" size="lg" onClick={ (e)=>{ handalLogin(e) } }>
@@ -117,13 +121,3 @@ export default function Login() {
         
     )
 }
-// .then((response)=>{
-
-//     navigate('/home')
-//     localStorage.setItem("auth_token",response?.data?.auth_token);
-//     swal("Good job!", "login successfully", "success");    
-// }).catch((err)=>{
-//     //console.log("okokok")
-//     navigate('/login');
-//     swal("Bad Request!", "User Not Login", "error");
-// })
