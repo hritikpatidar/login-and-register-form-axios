@@ -4,12 +4,12 @@ import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';
+import initialState from '../initialState/LoginInitialState';
+import {emailregex} from "../regex/regex"
+import {passregex} from "../regex/regex"
 
 
-const initialState = {
-    email:"",
-    password:""
-}
+
 
 export default function Login() {
     //1. state/Hooks
@@ -25,41 +25,43 @@ export default function Login() {
 
     //2. function defination
     let handalLogin= async ()=>{
+        
         try {
-            if(!login.email || !login.password){
-                let errors = {};
-                const emailregex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
-                const passregex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
+            if(!login.email || login.email.length < 3 || !emailregex.test(login.email) || !login.password || !passregex.test(login.password)){
+            
+            let errors= {}
 
-                if (!login.email) {
-                    errors.email = "Please enter your email"
-                } else if (!emailregex.test(login.email)) {
-                    errors.email = "Email does not valid "
-                }
-
-                if (!login.password) {
-                    errors.password = "Please enter your password"
-                } else if (login.password.length <= 2) {
-                    errors.password = "please enter grater than 2 "
-                } else if (!passregex.test(login.password)) {
-                    errors.password = "6 to 20  numeric digit, one uppercase and one lowercase letter"
-                }
-                setError(errors);
-            }else{
-                let res = await axios.post("https://myfbspike.herokuapp.com/api/login/",login)
-                navigate('/home')
-                localStorage.setItem("auth_token",res?.data?.auth_token);
-                //console.log(res)
-                if(res.status === 200){
-                    swal(res.request.statusText, "login successfuly", "success");
-                }
+            if(!login.email ){
+                errors.email = "*"
+            }else if(login.email.length < 3){
+                errors.email = "Enter minimum 3 character";
+            }else if(!emailregex.test(login.email)){
+                errors.email = "Email does not valid"
             }
+
+            if(!login.password){
+                errors.password = "*"
+            }else if (!passregex.test(login.password)){
+                errors.password = "please enter this type password (A-Z)(a-z)(0-9)"
+            }
+                
+            setError(errors)
+              
+        }else{
+            let res = await axios.post("https://myfbspike.herokuapp.com/api/login/",login)
+            navigate('/home')
+            localStorage.setItem("auth_token",res?.data?.auth_token);
+            //console.log(res)
+            if(res.status === 200){
+                swal(res.request.statusText, "login successfuly", "success");
+            }
+        }
             
             
 
         }catch (error) {
             //console.error(error);
-            swal("Bad Request!", error.response.data.detail, "error");
+            swal(error.code, error.response.data.detail, "error");
         }
         //navigate("/home");
 
@@ -69,34 +71,53 @@ export default function Login() {
     }
 
     let handalChange=(e)=>{
-        let newData = { ...login }
-        newData = { ...login, [e.target.name]: e.target.value }
-        setLogin({ ...login, ...newData });
-        //console.log(login)
-
-        const emailregex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
-        console.log(newData.email)
-        if(newData.email == ""){
-            error.email = "Enter your email"
-        }else if(newData.email.length < 3){
-            error.email = "Enter minimum 3 caracturs";
-        }else if(!emailregex.test(newData.email)){
-            error.email = "please enter valid email"
-        }else if(emailregex.test(newData.email)){
-            error.email = ""
-        }
-
-        // now hear password code 
-        setError(error);
+        let name = e.target.name
+        let value = e.target.value
+        let newData = { ...login, [name]: value }
+        setLogin({
+            ...login,
+            [name]:value
+        })
+        validation(newData,name);
     }
 
+
+    console.log()
+    let validation= (newData,name)=>{
+        let error = {};
+        switch (name){
+            case "email" :
+                if(!newData.email ){
+                    error.email = "*"
+                }else if(newData.email.length < 3){
+                    error.email = "Enter minimum 3 character";
+                }else if(!emailregex.test(newData.email)){
+                    error.email = "Email does not valid"
+                }else if(emailregex.test(newData.email)){
+                    error.email = ""
+                }
+                break;
+            case "password" :
+                if(!newData.password){
+                    error.password = "*"
+                }else if(newData.password.length < 6 || newData.password.length >20  ){
+                    error.password = "Enter min 6 and mex 20 character";
+                }else if (!passregex.test(newData.password)){
+                    error.password = "please enter this type password (A-Z)(a-z)(0-9)"
+                }else if (passregex.test(newData.password)){
+                    error.password = ""
+                }
+                break;
+        }
+        return setError(error);
+    }
    
 
     let handalRegister = (e)=>{
         navigate('/');
     }
     
-
+    console.log(error)
     //3. return statement /jsx
     return (
         
@@ -104,7 +125,7 @@ export default function Login() {
             <Row>
                 <Col md={{ span: 6, offset: 3 }}>
                     <Form>
-                        <h1 className="text-center mt-5">Login form in react </h1>
+                        <h1 className="text-center mt-5 bg-primary text-white">Login form in react </h1>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                             <Form.Label>Email address</Form.Label>
                             <Form.Control type="email" name="email" value={login.email} onChange={(e) => { handalChange(e)}} placeholder="name@example.com" />

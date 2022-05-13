@@ -2,21 +2,14 @@
 import axios from 'axios';
 import React, { useState } from 'react'
 import { Button, Col, Container, Form, Row } from 'react-bootstrap'
-import { useNavigate } from 'react-router-dom';
+import initialState from '../initialState/ForgetInitialState';
 
 
-const initialState = {
-    email:""
-    
-}
+
 
 export default function Forgetpwd() {
     const [forget, setForget] = useState(initialState);
     const [error, setError] = useState(initialState);
-
-    const navigate = useNavigate();
-
-
     let handalChange=(e)=>{
         let newData = { ...forget }
         newData = { ...forget, [e.target.name]: e.target.value }
@@ -57,7 +50,7 @@ export default function Forgetpwd() {
             <Row>
                 <Col md={{ span: 6, offset: 3 }}>
                     <Form>
-                        <h1 className="text-center mt-5 mb-4">Forget Password </h1>
+                        <h1 className="text-center mt-5 mb-4 bg-primary text-white">Forget Password </h1>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                             <Form.Label>Email</Form.Label>
                             <Form.Control type="email" name="email" value={forget.email} onChange={(e) => { handalChange(e)}} placeholder="name@example.com" />

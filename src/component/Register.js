@@ -5,16 +5,11 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import swal from 'sweetalert';
 import '../App.css'
+import initialState from '../initialState/RegisterInitialState';
+import {numberregex} from '../regex/regex'
+import {emailregex} from '../regex/regex'
+import {passregex} from '../regex/regex'
 
-
-var initialState = {
-    first_name: "",
-    last_name: "",
-    email: "",
-    password: "",
-    gender: "",
-    date_of_birth: ""
-}
 
 
 export default function Register() {
@@ -30,36 +25,42 @@ export default function Register() {
         }
     }, [])
 
-  
 
     //2. function defination
 
 
     let handalSubmit = async (e) => {
+        
         try {
-            if (!user.first_name || !user.last_name || !user.email || !user.password || !user.gender || !user.date_of_birth) {
-                let errors = {};
-                const numberregex = /^[a-zA-Z]+$/;
-                const emailregex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
-                const passregex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
+            if (!user.first_name || !numberregex.test(user.first_name) || !user.email  || !emailregex.test(user.email)|| !user.password || !passregex.test(user.password) || !user.gender || !user.date_of_birth ) {
+                let errors = {}
+
                 if(!user.first_name){
-                    errors.first_name = "First name is required"
-                }else if (!numberregex.test(user.first_name)) {
-                    errors.first_name = "enter only alphabets"
+                    errors.first_name = "*"
+                }else if(!numberregex.test(user.first_name)){
+                    errors.first_name = "Enter only alphabets"
                 }
 
-                if (!user.email) {
-                    errors.email = "Please enter your email"
-                } else if (!emailregex.test(user.email)) {
-                    errors.email = "Email does not valid "
+                if(!user.email){
+                    errors.email = "*"
+                }else if(user.email.length < 3){
+                    errors.email = "Enter minimum 3 character";
+                }else if(!emailregex.test(user.email)){
+                    errors.email = "Please enter valid email"
                 }
 
-                if (!user.password) {
-                    errors.password = "Please enter your password"
-                } else if (user.password.length <= 2) {
-                    errors.password = "please enter grater than 2 "
-                } else if (!passregex.test(user.password)) {
-                    errors.password = "6 to 20  numeric digit, one uppercase and one lowercase letter"
+                if(!user.password ){
+                    errors.password = "*"
+                }else if (!passregex.test(user.password)){
+                    errors.password = "please enter this type password (A-Z)(a-z)(0-9)"
+                }
+
+                if(!user.gender){
+                    errors.gender = "*"
+                }
+
+                if(!user.date_of_birth){
+                    errors.date_of_birth = "*"
                 }
 
                 setError(errors)
@@ -79,6 +80,7 @@ export default function Register() {
 
         } catch (error) {
             //console.error(error);
+            swal(error.code, error.message, "error");
         }
 
 
@@ -86,12 +88,78 @@ export default function Register() {
     }
 
     let handalChange = (e) => {
-        //console.log(e.target.value)
-        //setUser(e.target.value);
-        let newData = { ...user }
-        newData = { ...user, [e.target.name]: e.target.value }
-        setUser({ ...user, ...newData });
-        //console.log(user)
+       let name = e.target.name;
+       let value = e.target.value;
+
+       
+        // let newData = { ...user }
+        let newData = { ...user, [name]: value }
+        setUser({...user,[name]:value});
+        // //console.log(user)
+
+        // //console.log(newData.email)
+        validation(newData,name);
+    }
+    let validation=(newData,name)=>{
+         //now hear first name validation code
+        let error = {};
+
+        switch(name){
+            case "first_name":
+                if(!newData.first_name){
+                    error.first_name = "*"
+                }else if(newData.first_name.length <= 2){
+                    error.first_name = "Enter min 3 character"
+                }else if(!numberregex.test(newData.first_name)){
+                    error.first_name = "Enter only alphabets"
+                }else if(newData.first_name.length > 2){
+                    error.first_name = ""
+                }
+                break;
+            case "last_name":
+                //now hear Last Name validation
+                if(!newData.last_name){
+                    error.last_name = "*"
+                }
+                break;
+            case "email":
+                //new hear email validation code 
+                if(!newData.email){
+                    error.email = "*"
+                }else if(newData.email.length < 3){
+                    error.email = "Enter minimum 3 character";
+                }else if(!emailregex.test(newData.email)){
+                    error.email = "Please enter valid email"
+                }else if(emailregex.test(newData.email)){
+                    error.email = ""
+                }
+                break;
+            case "password":
+                // now hear password validation code 
+                if(!newData.password ){
+                    error.password = "*"
+                }else if(newData.password.length < 5 || newData.password.length >20  ){
+                    error.password = "Enter min 6 and mex 20 character";
+                }else if (!passregex.test(newData.password)){
+                    error.password = "please enter this type password (A-Z)(a-z)(0-9)"
+                }else if (passregex.test(newData.password)){
+                    error.password = ""
+                }
+                break;
+            case "gender":
+                //now hear gender validation code 
+                if(!newData.gender){
+                    error.gender = "*"
+                }
+                break;
+            case "date_of_birth":
+                //new hear date of birth validation code
+                if(!newData.date_of_birth){
+                    error.date_of_birth = "*"
+                }
+                break;
+        }
+        return setError(error);
     }
 
     let handalLogin = (e) => {
@@ -104,7 +172,7 @@ export default function Register() {
         <Container >
             <Row>
                 <Col md={{ span: 6, offset: 3 }}>
-                    <h1 className="text-center mt-5">Register form in react </h1>
+                    <h1 className="text-center mt-5 bg-primary text-white">Register form in react </h1>
                     <Form.Group className="mb-3 " controlId="exampleForm.ControlInput1">
                         <Form.Label>First </Form.Label>
                         <Form.Control type="text" name="first_name" value={user?.first_name} onChange={(e) => { handalChange(e) }} placeholder="Enter your first name" />
@@ -114,6 +182,7 @@ export default function Register() {
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
                         <Form.Label>Last Name</Form.Label>
                         <Form.Control type="text" name="last_name" value={user.last_name} onChange={(e) => { handalChange(e) }} placeholder="Enter your last name" />
+                        <span style={{color:'red'}}>{error?.last_name}</span>
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="exampleForm.ControlInput3">
                         <Form.Label>Email address</Form.Label>
@@ -125,16 +194,23 @@ export default function Register() {
                         <Form.Control type="password" name="password" value={user.password} onChange={(e) => { handalChange(e) }} placeholder="Enter your password" />
                         <span style={{color:'red'}}>{error?.password}</span>
                     </Form.Group>
-                    <Form.Label >Gender</Form.Label>
-                    <Form.Select className="mb-3" name="gender" value={user.gender} onChange={(e) => { handalChange(e) }}>
-                        <option>Select gander....</option>
-                        <option value="1">male</option>
-                        <option value="2">female</option>
-                    </Form.Select>
-                    <Form.Group controlId="duedate" className="mb-3">
-                        <Form.Label>Date of Birth</Form.Label>
-                        <Form.Control type="date" name="date_of_birth" placeholder="Due date" value={user.date_of_birth} onChange={(e) => { handalChange(e) }} /></Form.Group>
-
+                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput4">
+                        <Form.Label >Gender</Form.Label>
+                        <Form.Select name="gender" value={user.gender} onChange={(e) => { handalChange(e) }}>
+                            <option>Select gander....</option>
+                            <option value="1">male</option>
+                            <option value="2">female</option>
+                        </Form.Select>
+                        <span style={{color:'red'}}>{error?.gender}</span>
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput4">
+                        <Form.Group controlId="duedate" >
+                            <Form.Label>Date of Birth</Form.Label>
+                            <Form.Control type="date" name="date_of_birth" placeholder="Due date" value={user.date_of_birth} onChange={(e) => { handalChange(e) }} />
+                            </Form.Group>
+                        <span style={{color:'red'}}>{error?.date_of_birth}</span>
+                    </Form.Group>
+                    
 
                     <div className="d-grid gap-2 mb-3">
                         <Button variant="primary" size="lg" onClick={(e) => { handalSubmit(e) }}>

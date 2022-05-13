@@ -35,11 +35,11 @@ export default function Header() {
     return (
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
             <Container>
-                <Navbar.Brand href="#home">Patidar-Project</Navbar.Brand>
+                <Navbar.Brand href="/home">Patidar-Project</Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto" >
-                        <Link to="/home" className="me-3 ms-5 text-white text-decoration-none">Home</Link>
+                        <Link to="/home" className="me-3  text-white text-decoration-none">Home</Link>
                         <Link to="/news" className="me-3 text-white text-decoration-none">News</Link>
                         <Link to="/sport" className="me-3 text-white text-decoration-none">Sports</Link>
                         <Link to="/features" className="me-3 text-white text-decoration-none" >features</Link>
