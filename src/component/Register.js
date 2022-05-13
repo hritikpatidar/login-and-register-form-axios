@@ -158,6 +158,7 @@ export default function Register() {
                     error.date_of_birth = "*"
                 }
                 break;
+            default:
         }
         return setError(error);
     }

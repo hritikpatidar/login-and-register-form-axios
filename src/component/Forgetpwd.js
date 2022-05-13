@@ -1,5 +1,4 @@
 
-import axios from 'axios';
 import React, { useState } from 'react'
 import { Button, Col, Container, Form, Row } from 'react-bootstrap'
 import initialState from '../initialState/ForgetInitialState';

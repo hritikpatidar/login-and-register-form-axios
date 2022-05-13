@@ -108,6 +108,7 @@ export default function Login() {
                     error.password = ""
                 }
                 break;
+                default :
         }
         return setError(error);
     }
