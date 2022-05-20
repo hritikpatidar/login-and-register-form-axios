@@ -21,7 +21,7 @@ export default function Login() {
         if(token1){
             navigate('/home')
         }
-    }, [])
+    })
 
     //2. function defination
     let handalLogin= async ()=>{

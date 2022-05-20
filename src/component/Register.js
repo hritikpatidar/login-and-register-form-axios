@@ -23,7 +23,7 @@ export default function Register() {
         if(token1){
             navigate('/home')
         }
-    }, [])
+    })
 
 
     //2. function defination
