@@ -195,7 +195,7 @@ export default function Register() {
                         <Form.Control type="password" name="password" value={user.password} onChange={(e) => { handalChange(e) }} placeholder="Enter your password" />
                         <span style={{color:'red'}}>{error?.password}</span>
                     </Form.Group>
-                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput4">
+                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput5">
                         <Form.Label >Gender</Form.Label>
                         <Form.Select name="gender" value={user.gender} onChange={(e) => { handalChange(e) }}>
                             <option>Select gander....</option>
@@ -204,7 +204,7 @@ export default function Register() {
                         </Form.Select>
                         <span style={{color:'red'}}>{error?.gender}</span>
                     </Form.Group>
-                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput4">
+                    <Form.Group className="mb-3" controlId="exampleForm.ControlInput6">
                         <Form.Group controlId="duedate" >
                             <Form.Label>Date of Birth</Form.Label>
                             <Form.Control type="date" name="date_of_birth" placeholder="Due date" value={user.date_of_birth} onChange={(e) => { handalChange(e) }} />
